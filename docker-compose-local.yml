@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  myurls:
+    build:
+      dockerfile: ./Dockerfile
+      args:
+        SERVER_PORT: ${SERVER_PORT}
+        SERVER_HOST: ${SERVER_HOST}
+    image: shorten-url-image
+    container_name: myurls
+    env_file: .env
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+#      - "7070:8086"
+#    volumes:
+#      - ./engine:./home/
+    depends_on:
+      - mongodb
+
+
+  mongodb:
+    image: mongodb/mongodb-community-server:6.0-ubi8
+    restart: always
+    env_file: .env
+#    environment:
+#      - MONGO_INITDB_ROOT_USERNAME=codex01inf
+#      - MONGO_INITDB_ROOT_PASSWORD=A4MzxGYEnOrtwY5J
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    volumes:
+      - ./home/var/lib/mongodb-store:/data/db

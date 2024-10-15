@@ -1,0 +1,13 @@
+docker build -t shorten-url-image .
+
+docker run -d --name myURL -p 8086:8086 shorten-url-image
+
+docker run --name myURL -p 8086:8086 shorten-url-image tail -f /dev/null
+
+docker-compose -f ./docker-compose-local.yml up
+
+docker system prune -a && docker-compose -f ./docker-compose-local.yml --env-file .env up -d
+
+docker exec -it myurls /bin/sh
+
+docker inspect  -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' 5ab
